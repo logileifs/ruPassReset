@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using RUPassReset.Models;
+using RUPassReset.Service.Models.Password;
 
 namespace RUPassReset.Controllers
 {
@@ -16,9 +16,21 @@ namespace RUPassReset.Controllers
 			return View();
 		}
 
+		[HttpGet]
 		public ActionResult Forgot()
 		{
-			return View();
+			var model = new ForgotPasswordModel();
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Forgot(ForgotPasswordModel fpmodel)
+		{
+			if (ModelState.IsValid)
+			{
+				return RedirectToAction("Index");
+			}
+			return View(fpmodel);
 		}
 
 		[HttpGet]

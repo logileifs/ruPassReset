@@ -1,4 +1,4 @@
-﻿@model RUPassReset.Models.ChangePasswordModel
+﻿@model RUPassReset.Service.Models.Password.ChangePasswordModel
 
 <div class="center-panel">
 	<h3>Change password</h3>
@@ -23,12 +23,12 @@
 					@Html.ValidationMessageFor(model => model.UserName, null, new {@class="text-danger"})
 				</div>
 				<div class="form-group">
-					@Html.PasswordFor(model => model.PasswordOld, new 
+					@Html.PasswordFor(model => model.Password, new 
 					{
 						@class="form-control",
 						@placeholder="Old password"
 					})
-					@Html.ValidationMessageFor(model => model.PasswordOld, null, new {@class="text-danger"})
+					@Html.ValidationMessageFor(model => model.Password, null, new {@class="text-danger"})
 				</div>
 				<div class="form-group">
 					@Html.PasswordFor(model => model.PasswordNew, new 

@@ -1,4 +1,5 @@
-﻿
+﻿@model RUPassReset.Service.Models.Password.ForgotPasswordModel
+
 <div class="center-panel">
 	<h3>Forgotten password</h3>
 	<hr />
@@ -7,13 +8,22 @@
 			<p>Forgot your password? Don't worry, enter your RU login name to get started.</p>
 		</div>
 		<div class="col-md-6">
-			<form method="GET" action="">
-				<input type="text" class="form-control" placeholder="RU username" required autofocus />
+			@using (Html.BeginForm())
+			{
+				<div class="form-group">
+					@Html.TextBoxFor(model => model.UserName, new
+					{
+						@class="form-control", 
+						@placeholder = "RU username",
+						@autofocus = true
+					})
+					@Html.ValidationMessageFor(model => model.UserName, null, new {@class="text-danger"})	
+				</div>
 				<div class="btn-controls pull-right">
 					<a href="/" class="btn btn-default">Cancel</a>
 					<button type="submit" class="btn btn-primary">Next</button>	
 				</div>
-			</form>
+			}
 		</div>
 	</div>
 </div>
