@@ -1,0 +1,32 @@
+﻿body {
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+.center-panel {
+  max-width: 640px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: #eee;
+}
+
+#hr-logo {
+	width: 300px;
+}
+
+.center-panel h3 {
+	margin: 0 0 5px 0;
+}
+
+.center-panel .options {
+	text-align: right;
+}
+
+.center-panel .info {
+	border-right: 1px solid rgba(0,0,0,0.1);
+	min-height: 100px;
+}
+
+.center-panel .btn-controls {
+	margin-top: 5px;
+}
