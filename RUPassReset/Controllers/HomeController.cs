@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using RUPassReset.Models;
 
 namespace RUPassReset.Controllers
 {
@@ -23,7 +24,18 @@ namespace RUPassReset.Controllers
 		[HttpGet]
 		public ActionResult Change()
 		{
-			return View();
+			var model = new ChangePasswordModel();
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Change(ChangePasswordModel cpmodel)
+		{
+			if (ModelState.IsValid)
+			{
+				return RedirectToAction("Index");
+			}
+			return View(cpmodel);
 		}
 
 	}

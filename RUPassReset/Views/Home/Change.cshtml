@@ -1,4 +1,4 @@
-﻿
+﻿@model RUPassReset.Models.ChangePasswordModel
 
 <div class="center-panel">
 	<h3>Change password</h3>
@@ -6,26 +6,51 @@
 	<div class="row">
 		<div class="col-md-6 info">
 			<p>Please fill out the form to change your password.</p>
+			<p class="italic">Note that the password must be at least 6 characters long. We suggest you pick a password that consists of two or more random words to form a 
+				random sentence.
+			</p>
 		</div>
 		<div class="col-md-6">
-			<form method="POST" action="/change">
+			@using (Html.BeginForm())
+			{
 				<div class="form-group">
-					<input name="username" type="text" class="form-control" placeholder="RU username" required autofocus />
+					@Html.TextBoxFor(model => model.UserName, new
+					{
+						@class="form-control", 
+						@placeholder = "RU username",
+						@autofocus = true
+					})
+					@Html.ValidationMessageFor(model => model.UserName, null, new {@class="text-danger"})
 				</div>
 				<div class="form-group">
-					<input name="old_password" type="password" class="form-control" placeholder="Old password" required />	
+					@Html.PasswordFor(model => model.PasswordOld, new 
+					{
+						@class="form-control",
+						@placeholder="Old password"
+					})
+					@Html.ValidationMessageFor(model => model.PasswordOld, null, new {@class="text-danger"})
 				</div>
 				<div class="form-group">
-					<input name="new_password" type="password" class="form-control" placeholder="New password" required />	
+					@Html.PasswordFor(model => model.PasswordNew, new 
+					{
+						@class="form-control",
+						@placeholder="New password"
+					})
+					@Html.ValidationMessageFor(model => model.PasswordNew, null, new {@class="text-danger"})
 				</div>
 				<div class="form-group">
-					<input name="new_password_confirmed" type="password" class="form-control" placeholder="Verify password" required />	
+					@Html.PasswordFor(model => model.PasswordNewConfirm, new 
+					{
+						@class="form-control",
+						@placeholder="Verify password"
+					})
+					@Html.ValidationMessageFor(model => model.PasswordNewConfirm, null, new {@class="text-danger"})
 				</div>
 				<div class="btn-controls pull-right">
 					<a href="/" class="btn btn-default">Cancel</a>
 					<button type="submit" class="btn btn-primary">Next</button>	
 				</div>
-			</form>
+			}
 		</div>
 	</div>
 </div>
