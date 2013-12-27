@@ -2,7 +2,7 @@
 
 namespace RUPassReset.Service.Models.Password
 {
-	public class ChangePasswordModel : PasswordModel
+	public class ChangePassword : Password
 	{
 		[Required(ErrorMessage = "Please provide your old password.")]
 		[DataType(DataType.Password)]

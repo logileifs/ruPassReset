@@ -19,12 +19,12 @@ namespace RUPassReset.Controllers
 		[HttpGet]
 		public ActionResult Forgot()
 		{
-			var model = new ForgotPasswordModel();
+			var model = new Password();
 			return View(model);
 		}
 
 		[HttpPost]
-		public ActionResult Forgot(ForgotPasswordModel fpmodel)
+		public ActionResult Forgot(Password fpmodel)
 		{
 			if (ModelState.IsValid)
 			{
@@ -36,12 +36,12 @@ namespace RUPassReset.Controllers
 		[HttpGet]
 		public ActionResult Change()
 		{
-			var model = new ChangePasswordModel();
+			var model = new ChangePassword();
 			return View(model);
 		}
 
 		[HttpPost]
-		public ActionResult Change(ChangePasswordModel cpmodel)
+		public ActionResult Change(ChangePassword cpmodel)
 		{
 			if (ModelState.IsValid)
 			{

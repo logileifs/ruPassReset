@@ -2,7 +2,7 @@
 
 namespace RUPassReset.Service.Models.Password
 {
-	public class PasswordModel
+	public class Password
 	{
 		[Required(ErrorMessage = "Please provide a username.")]
 		public string UserName { get; set; }
