@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using RUPassReset.Service;
 using RUPassReset.Service.Models.Password;
 using RUPassReset.Service.ServiceModels;
@@ -11,29 +7,25 @@ namespace RUPassReset.Controllers
 {
 	public class HomeController : Controller
 	{
-		private EmailService _mailService = new EmailService();
+		private PasswordService _passwordService = new PasswordService();
 
 		public ActionResult Index()
 		{
-			ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-
 			return View();
 		}
 
 		[HttpGet]
-		public ActionResult Forgot()
+		public ActionResult Reset()
 		{
-			var model = new Password();
-			return View(model);
+			return View();
 		}
 
 		[HttpPost]
-		public ActionResult Forgot(Password fpmodel)
+		public ActionResult Reset(Password fpmodel)
 		{
 			if (ModelState.IsValid)
 			{
-				_mailService.sendPasswordResetEmail(new User {Email = "benediktl11@ru.is", Name = "Logi"}, "aæsdkfæasdjkf");
-				return RedirectToAction("Index");
+				return View("ResetEmailSent", fpmodel);
 			}
 			return View(fpmodel);
 		}
@@ -50,6 +42,12 @@ namespace RUPassReset.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+				var user = new User
+				{
+					Email = "benediktl11@ru.is",
+					Username = "benediktl11"
+				};
+				_passwordService.changePassword(user, "kartafla");
 				return RedirectToAction("Index");
 			}
 			return View(cpmodel);

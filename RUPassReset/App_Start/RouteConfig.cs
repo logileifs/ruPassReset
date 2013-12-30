@@ -15,9 +15,9 @@ namespace RUPassReset
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			routes.MapRoute(
-				name: "Forgot",
-				url: "forgot/",
-				defaults: new { controller = "Home", action = "Forgot" }
+				name: "Reset",
+				url: "reset/",
+				defaults: new { controller = "Home", action = "Reset" }
 			);
 
 			routes.MapRoute(

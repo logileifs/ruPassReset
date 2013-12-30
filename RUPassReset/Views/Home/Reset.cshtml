@@ -8,7 +8,7 @@
 			<p>Forgot your password? Don't worry, enter your RU login name to get started.</p>
 		</div>
 		<div class="col-md-6">
-			@using (Html.BeginForm())
+			@using (Html.BeginForm(FormMethod.Get))
 			{
 				<div class="form-group">
 					@Html.TextBoxFor(model => model.UserName, new

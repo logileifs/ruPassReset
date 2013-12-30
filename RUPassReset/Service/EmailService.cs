@@ -11,7 +11,7 @@ namespace RUPassReset.Service
 			var message = new MailMessage();
 			message.To.Add(user.Email);
 			message.Subject = "Resetting your password";
-			message.Body = String.Format("<p>Hi {0}! Please click <a href='http://mbl.is'>here</a>' to reset your password.</p>", user.Name);
+			message.Body = String.Format("<p>Hi {0}! Please click <a href='http://mbl.is'>here</a>' to reset your password.</p>", user.Username);
 			message.IsBodyHtml = true;
 			send(message);
 		}
@@ -21,7 +21,7 @@ namespace RUPassReset.Service
 			var message = new MailMessage();
 			message.To.Add(user.Email);
 			message.Subject = "Your password has been reset!";
-			message.Body = String.Format("<p>Hi {0}! Your password has been successfully reset.</p>", user.Name);
+			message.Body = String.Format("<p>Hi {0}! Your password has been successfully reset.</p>", user.Username);
 			message.IsBodyHtml = true;
 			send(message);
 		}
