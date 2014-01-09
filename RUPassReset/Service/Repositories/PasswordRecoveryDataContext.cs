@@ -2,7 +2,7 @@
 using System.Data.Entity.ModelConfiguration.Conventions;
 using RUPassReset.Service.Models;
 
-namespace RUPassReset.Service.Repository
+namespace RUPassReset.Service.Repositories
 {
 	public class PasswordRecoveryDataContext : DbContext
 	{

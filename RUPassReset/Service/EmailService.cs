@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
-using RUPassReset.Service.ServiceModels;
+using RUPassReset.Service.DBModels;
 
 namespace RUPassReset.Service
 {

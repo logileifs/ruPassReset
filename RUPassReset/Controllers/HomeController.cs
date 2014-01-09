@@ -1,14 +1,15 @@
 ﻿using System.Web.Mvc;
 using RUPassReset.Service;
-using RUPassReset.Service.Models.Password;
-using RUPassReset.Service.ServiceModels;
 
 namespace RUPassReset.Controllers
 {
 	public class HomeController : Controller
 	{
+		#region Private variables
 		private PasswordService _passwordService;
+		#endregion
 
+		#region Public methods
 		public HomeController()
 		{
 			_passwordService = new PasswordService();
@@ -26,15 +27,44 @@ namespace RUPassReset.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Reset(Password fpmodel)
+		public ActionResult Reset(string SSN)
 		{
-			if (ModelState.IsValid)
+			if (SSN.Length != 10)
 			{
-				//var test = _passwordService.reset();
-				return View("ResetEmailSent", fpmodel);
+				ModelState.AddModelError("Error", "Invalid social security number.");
+				return View();
 			}
-			return View(fpmodel);
-		}
 
+			try
+			{
+				var ip = "89.160.136.204"; // hardcoded to begin with
+				_passwordService.SendPasswordResetEmail(SSN, ip);
+				return View("ResetEmailSent");
+			}
+			catch (UserNotFoundException unfex)
+			{
+				ModelState.AddModelError("Error", "User not found.");
+				return View();
+			}
+		}
+		#endregion
+
+		#region Private methods
+
+		/// <summary>
+		/// Returns the IP address of the request. 
+		/// Currently not working.
+		/// </summary>
+		/// <returns></returns>
+		private string GetIp()
+		{
+			string ipList = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+			if (!string.IsNullOrEmpty(ipList))
+			{
+				return ipList.Split(',')[0];
+			}
+			return Request.ServerVariables["REMOTE_ADDR"];
+		}
+		#endregion
 	}
 }
