@@ -7,7 +7,12 @@ namespace RUPassReset.Controllers
 {
 	public class HomeController : Controller
 	{
-		private PasswordService _passwordService = new PasswordService();
+		private PasswordService _passwordService;
+
+		public HomeController()
+		{
+			_passwordService = new PasswordService();
+		}
 
 		public ActionResult Index()
 		{
@@ -25,32 +30,10 @@ namespace RUPassReset.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+				var test = _passwordService.reset();
 				return View("ResetEmailSent", fpmodel);
 			}
 			return View(fpmodel);
-		}
-
-		[HttpGet]
-		public ActionResult Change()
-		{
-			var model = new ChangePassword();
-			return View(model);
-		}
-
-		[HttpPost]
-		public ActionResult Change(ChangePassword cpmodel)
-		{
-			if (ModelState.IsValid)
-			{
-				var user = new User
-				{
-					Email = "benediktl11@ru.is",
-					Username = "benediktl11"
-				};
-				_passwordService.changePassword(user, "kartafla");
-				return RedirectToAction("Index");
-			}
-			return View(cpmodel);
 		}
 
 	}
