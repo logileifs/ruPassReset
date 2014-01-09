@@ -30,7 +30,7 @@ namespace RUPassReset.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var test = _passwordService.reset();
+				//var test = _passwordService.reset();
 				return View("ResetEmailSent", fpmodel);
 			}
 			return View(fpmodel);
