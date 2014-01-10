@@ -43,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -194,6 +196,7 @@
     <Compile Include="Service\EmailService.cs" />
     <Compile Include="Service\DBModels\PasswordRecoveryMap.cs" />
     <Compile Include="Service\Exceptions\IllegalTokenException.cs" />
+    <Compile Include="Service\LDAPPasswordService.cs" />
     <Compile Include="Service\Repositories\MyschoolDataContext.cs" />
     <Compile Include="Service\ServiceModels\ChangePassword.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -201,12 +204,15 @@
     <Compile Include="Service\PasswordService.cs" />
     <Compile Include="Service\Repositories\PasswordRecoveryDataContext.cs" />
     <Compile Include="Service\Exceptions\UserNotFoundException.cs" />
+    <Compile Include="Service\TestLDAPService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\img\default_white.png" />
     <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\jquery.maskedinput.min.js" />
+    <Content Include="Content\js\site.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -303,7 +309,6 @@
     <Content Include="Images\orderedList8.png" />
     <Content Include="Images\orderedList9.png" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />

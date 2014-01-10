@@ -99,9 +99,15 @@ namespace RUPassReset.Service
 		/// <summary>
 		/// Given a token it will reset the password of the user that is assigned to that token. 
 		/// </summary>
-		public void ResetPassword(string token, string usedByIP)
+		public void ResetPassword(string token, string newPassword, string usedByIP)
 		{
-			// TODO
+			var result = (from recovery in _passCtx.PasswordRecovery
+				where recovery.Token == token
+				select recovery).SingleOrDefault();
+
+			var test = new ADMethodsAccountManagement();
+			var moreTest = test.GetUser(result.Username);
+			string stuff = "hello";
 		}
 		#endregion
 

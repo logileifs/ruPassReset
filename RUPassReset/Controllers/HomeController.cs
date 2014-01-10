@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
+using RUPassReset.Configuration;
 using RUPassReset.Service;
 using RUPassReset.Service.Models.Password;
 
@@ -18,7 +20,7 @@ namespace RUPassReset.Controllers
 
 		public ActionResult Index()
 		{
-			return View();
+			return View("Reset");
 		}
 
 		[HttpGet]
@@ -30,16 +32,17 @@ namespace RUPassReset.Controllers
 		[HttpPost]
 		public ActionResult Reset(string SSN)
 		{
-			if (SSN.Length != 10)
+			if (SSN.Length != 11)
 			{
 				ModelState.AddModelError("Error", "Invalid social security number.");
 				return View();
 			}
 
+			var sanitizedSSN = SSN.Replace("-", "");
+
 			try
 			{
-				var ip = "89.160.136.204"; // hardcoded to begin with
-				var user = _passwordService.CreateResetToken(SSN, ip);
+				var user = _passwordService.CreateResetToken(sanitizedSSN, "89.160.136.204");
 				return View("ResetEmailSent", user);
 			}
 			catch (UserNotFoundException unfex)
@@ -52,10 +55,13 @@ namespace RUPassReset.Controllers
 		[HttpGet]
 		public ActionResult Verify(string token)
 		{
+			// Check if token is active
 			var recovery = _passwordService.VerifyToken(token);
 			if (token == null || recovery == null)
+			{
 				return View("UnableToVerify");
-
+			}
+		
 			var changePass = new ChangePassword();
 			changePass.Token = token;
 			changePass.Username = recovery.Username;
@@ -64,12 +70,27 @@ namespace RUPassReset.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Change(ChangePassword changePassword)
+		public ActionResult Verify(ChangePassword changePassword)
 		{
-			if (!ModelState.IsValid)
-				return View("Change", changePassword);
+			// First, check if token is active
 			if (_passwordService.VerifyToken(changePassword.Token) == null)
+			{
 				return View("UnableToVerify");
+			}
+			// Check if modelstate is valid
+			if (!ModelState.IsValid)
+			{
+				return View("Change", changePassword);
+			}
+			// Check if password is long enough
+			if (changePassword.PasswordNew.Length < RUPassResetConfig.Config.MinimumPasswordLength)
+			{
+				ModelState.AddModelError("Error", String.Format("Password must be longer than {0} characters.", RUPassResetConfig.Config.MinimumPasswordLength));
+				return View("Change", changePassword);
+			}
+
+			// All checks passed, proceed to change password
+			_passwordService.ResetPassword(changePassword.Token, changePassword.PasswordNew, "89.160.136.204");
 			return View("PasswordChangeSuccess");
 		}
 		#endregion

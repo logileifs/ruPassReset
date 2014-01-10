@@ -4,7 +4,8 @@
 	<hr />
 	<div class="row">
 		<div class="col-md-6 info">
-			<p>Forgot your password? Don't worry, enter your social security number to get started. Hit <i>Cancel</i> to go back to RU's website.</p>
+			<p>Forgot your password? Don't worry, enter your social security number to get started.</p>
+			<p>Hit <i>Cancel</i> to go back to RU's website.</p> 
 		</div>
 		<div class="col-md-6">
 			@using (Html.BeginForm("Reset", "Home", FormMethod.Post))
@@ -12,7 +13,7 @@
 				<div class="form-group">
 					@Html.TextBox("SSN", null, new
 					{
-						@class="form-control", 
+						@class="form-control ssn-field", 
 						@placeholder = "Social security number",
 						@autofocus = true
 					})

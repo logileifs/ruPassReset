@@ -27,12 +27,6 @@ namespace RUPassReset
 			);
 
 			routes.MapRoute(
-				name: "Change",
-				url: "change/",
-				defaults: new { controller = "Home", action = "Change" }
-			);
-
-			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

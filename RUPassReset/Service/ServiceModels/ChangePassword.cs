@@ -9,7 +9,6 @@ namespace RUPassReset.Service.Models.Password
 		public string Username { get; set; }
 
 		[Required(ErrorMessage = "Please provide a new password.")]
-		[StringLength(100, ErrorMessage = "The new password must be at least {2} characters long.", MinimumLength = 6)]
 		[DataType(DataType.Password)]
 		public string PasswordNew        { get; set; }
 
