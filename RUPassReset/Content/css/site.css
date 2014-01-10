@@ -48,3 +48,7 @@
 hr {
 	border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+blockquote.pull-right {
+	border-right: 5px solid #DB2E35;
+}

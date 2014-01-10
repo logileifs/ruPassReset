@@ -204,7 +204,7 @@
     <Compile Include="Service\PasswordService.cs" />
     <Compile Include="Service\Repositories\PasswordRecoveryDataContext.cs" />
     <Compile Include="Service\Exceptions\UserNotFoundException.cs" />
-    <Compile Include="Service\TestLDAPService.cs" />
+    <Compile Include="Service\ADHelperService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap.min.css" />

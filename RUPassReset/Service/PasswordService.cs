@@ -15,6 +15,7 @@ namespace RUPassReset.Service
 		private readonly PasswordRecoveryDataContext _passCtx;
 		private readonly MyschoolDataContext _myschoolCtx;
 		private EmailService _emailService;
+		private ADMethodsAccountManagement _adHelperAccountManagement;
 		private static Random _random;
 		#endregion
 
@@ -24,6 +25,7 @@ namespace RUPassReset.Service
 			_passCtx = new PasswordRecoveryDataContext();
 			_myschoolCtx = new MyschoolDataContext();
 			_emailService = new EmailService();
+			_adHelperAccountManagement = new ADMethodsAccountManagement();
 			_random = new Random((int) DateTime.Now.Ticks);
 		}
 		#endregion
@@ -34,31 +36,15 @@ namespace RUPassReset.Service
 		/// </summary>
 		public UserDTO CreateResetToken(string ssn, string createdByIP)
 		{
-			// Check if the user exists
-			var user = (from mUser in _myschoolCtx.Users
-				where mUser.SSN == ssn
-				select mUser).SingleOrDefault();
-
-			if (user == null)
+			var fullUser = GetFullUserBySSN(ssn);
+			if (fullUser == null)
 				throw new UserNotFoundException();
 
-			// user exists, find it's alternate email
-			var person = (from mPerson in _myschoolCtx.Persons
-				where mPerson.SSN == user.SSN
-				select mPerson).SingleOrDefault();
-
-			var fullUser = new UserDTO
-			{
-				Name = person.Name,
-				Username = user.Username,
-				Email = user.Email,
-				SecondaryEmail = person.Email
-			};
 			// proceed by create a record in the database
 			var passRecovery = new PasswordRecovery
 			{
 				Token = this.CreateToken(),
-				Username = user.Username,
+				Username = fullUser.Username,
 				TimeStamp = DateTime.Now,
 				CreatedByIP = createdByIP
 			};
@@ -99,15 +85,18 @@ namespace RUPassReset.Service
 		/// <summary>
 		/// Given a token it will reset the password of the user that is assigned to that token. 
 		/// </summary>
-		public void ResetPassword(string token, string newPassword, string usedByIP)
+		public void ResetPassword(PasswordRecovery passRecovery, string newPassword, string usedByIP)
 		{
-			var result = (from recovery in _passCtx.PasswordRecovery
-				where recovery.Token == token
-				select recovery).SingleOrDefault();
+			var errMessage = "";
+			if (passRecovery == null)
+				throw new IllegalTokenException();
 
-			var test = new ADMethodsAccountManagement();
-			var moreTest = test.GetUser(result.Username);
-			string stuff = "hello";
+			// set the new password
+			//_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
+
+			var fullUser = GetFullUserByUsername(passRecovery.Username);
+			// send confirmation email
+			_emailService.sendPasswordChangedConfirmation(fullUser);
 		}
 		#endregion
 
@@ -126,6 +115,58 @@ namespace RUPassReset.Service
 				builder.Append(ch);
 			}
 			return builder.ToString();
+		}
+
+		private UserDTO GetFullUserBySSN(string ssn)
+		{
+			// find the user
+			var user = (from mUser in _myschoolCtx.Users
+						where mUser.SSN == ssn
+						select mUser).SingleOrDefault();
+
+			if (user == null)
+				return null;
+
+			// user exists, find it's persona
+			var person = (from mPerson in _myschoolCtx.Persons
+						  where mPerson.SSN == user.SSN
+						  select mPerson).SingleOrDefault();
+
+			var fullUser = new UserDTO
+			{
+				Name = person.Name,
+				Username = user.Username,
+				Email = user.Email,
+				SecondaryEmail = person.Email
+			};
+
+			return fullUser;
+		}
+
+		private UserDTO GetFullUserByUsername(string username)
+		{
+			// find the user
+			var user = (from mUser in _myschoolCtx.Users
+						where mUser.Username == username
+						select mUser).SingleOrDefault();
+
+			if (user == null)
+				return null;
+
+			// user exists, find it's persona
+			var person = (from mPerson in _myschoolCtx.Persons
+						  where mPerson.SSN == user.SSN
+						  select mPerson).SingleOrDefault();
+
+			var fullUser = new UserDTO
+			{
+				Name = person.Name,
+				Username = user.Username,
+				Email = user.Email,
+				SecondaryEmail = person.Email
+			};
+
+			return fullUser;
 		}
 		#endregion
 	}

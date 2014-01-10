@@ -27,6 +27,12 @@ namespace RUPassReset.Configuration
 			get { return (int) this["tokenLifeTime"]; }
 		}
 
+		[ConfigurationProperty("verifyTokenURL")]
+		public string VerifyTokenURL
+		{
+			get { return (string)this["verifyTokenURL"]; }
+		}
+
 		[ConfigurationProperty("resetURL")]
 		public string ResetURL
 		{

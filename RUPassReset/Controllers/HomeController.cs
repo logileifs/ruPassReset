@@ -73,7 +73,8 @@ namespace RUPassReset.Controllers
 		public ActionResult Verify(ChangePassword changePassword)
 		{
 			// First, check if token is active
-			if (_passwordService.VerifyToken(changePassword.Token) == null)
+			var passRecovery = _passwordService.VerifyToken(changePassword.Token);
+			if (passRecovery == null)
 			{
 				return View("UnableToVerify");
 			}
@@ -90,7 +91,15 @@ namespace RUPassReset.Controllers
 			}
 
 			// All checks passed, proceed to change password
-			_passwordService.ResetPassword(changePassword.Token, changePassword.PasswordNew, "89.160.136.204");
+			try
+			{
+				_passwordService.ResetPassword(passRecovery, changePassword.PasswordNew, "89.160.136.204");
+			}
+			catch (IllegalTokenException itex)
+			{
+				return View("UnableToVerify");
+			}
+			
 			return View("PasswordChangeSuccess");
 		}
 		#endregion
