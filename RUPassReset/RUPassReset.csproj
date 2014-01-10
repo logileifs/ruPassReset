@@ -181,23 +181,26 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configuration\RUPassResetConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Service\DBModels\People.cs" />
+    <Compile Include="Service\DBModels\Person.cs" />
+    <Compile Include="Service\DBModels\PersonMap.cs" />
     <Compile Include="Service\DBModels\User.cs" />
+    <Compile Include="Service\DTO\UserDTO.cs" />
     <Compile Include="Service\DBModels\UserMap.cs" />
     <Compile Include="Service\EmailService.cs" />
     <Compile Include="Service\DBModels\PasswordRecoveryMap.cs" />
+    <Compile Include="Service\Exceptions\IllegalTokenException.cs" />
     <Compile Include="Service\Repositories\MyschoolDataContext.cs" />
     <Compile Include="Service\ServiceModels\ChangePassword.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\ServiceModels\Password.cs" />
     <Compile Include="Service\DBModels\PasswordRecovery.cs" />
     <Compile Include="Service\PasswordService.cs" />
     <Compile Include="Service\Repositories\PasswordRecoveryDataContext.cs" />
-    <Compile Include="Service\UserNotFoundException.cs" />
+    <Compile Include="Service\Exceptions\UserNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap.min.css" />
@@ -307,6 +310,8 @@
     <Content Include="Views\Home\Reset.cshtml" />
     <Content Include="Views\Home\Change.cshtml" />
     <Content Include="Views\Home\ResetEmailSent.cshtml" />
+    <Content Include="Views\Home\UnableToVerify.cshtml" />
+    <Content Include="Views\Home\PasswordChangeSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

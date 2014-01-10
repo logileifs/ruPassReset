@@ -23,10 +23,28 @@
 }
 
 .center-panel .info {
-	border-right: 1px solid rgba(0,0,0,0.1);
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	min-height: 100px;
 }
 
 .center-panel .btn-controls {
 	margin-top: 5px;
+}
+
+.success-panel p, .error-panel p {
+	text-align: center;
+}
+
+.success-panel i {
+	font-size: 52pt;
+	color: #5CB85C;
+}
+
+.error-panel i {
+	font-size: 52pt;
+	color: #DB2E35;
+}
+
+hr {
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
 }

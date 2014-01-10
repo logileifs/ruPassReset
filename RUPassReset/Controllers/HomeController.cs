@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using RUPassReset.Service;
+using RUPassReset.Service.Models.Password;
 
 namespace RUPassReset.Controllers
 {
@@ -38,14 +39,38 @@ namespace RUPassReset.Controllers
 			try
 			{
 				var ip = "89.160.136.204"; // hardcoded to begin with
-				_passwordService.SendPasswordResetEmail(SSN, ip);
-				return View("ResetEmailSent");
+				var user = _passwordService.CreateResetToken(SSN, ip);
+				return View("ResetEmailSent", user);
 			}
 			catch (UserNotFoundException unfex)
 			{
 				ModelState.AddModelError("Error", "User not found.");
 				return View();
 			}
+		}
+
+		[HttpGet]
+		public ActionResult Verify(string token)
+		{
+			var recovery = _passwordService.VerifyToken(token);
+			if (token == null || recovery == null)
+				return View("UnableToVerify");
+
+			var changePass = new ChangePassword();
+			changePass.Token = token;
+			changePass.Username = recovery.Username;
+
+			return View("Change", changePass);
+		}
+
+		[HttpPost]
+		public ActionResult Change(ChangePassword changePassword)
+		{
+			if (!ModelState.IsValid)
+				return View("Change", changePassword);
+			if (_passwordService.VerifyToken(changePassword.Token) == null)
+				return View("UnableToVerify");
+			return View("PasswordChangeSuccess");
 		}
 		#endregion
 

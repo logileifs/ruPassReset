@@ -4,7 +4,7 @@
 	<hr />
 	<div class="row">
 		<div class="col-md-6 info">
-			<p>Forgot your password? Don't worry, enter your RU login name to get started.</p>
+			<p>Forgot your password? Don't worry, enter your social security number to get started. Hit <i>Cancel</i> to go back to RU's website.</p>
 		</div>
 		<div class="col-md-6">
 			@using (Html.BeginForm("Reset", "Home", FormMethod.Post))
@@ -18,8 +18,9 @@
 					})
 					@Html.ValidationMessage("Error", new {@class="text-danger"})
 				</div>
+				<hr/>
 				<div class="btn-controls pull-right">
-					<a href="/" class="btn btn-default">Cancel</a>
+					<a href="http://www.ru.is" class="btn btn-default">Cancel</a>
 					<button type="submit" class="btn btn-primary">Next</button>	
 				</div>
 			}

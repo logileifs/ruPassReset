@@ -1,13 +1,15 @@
-﻿
+﻿@model RUPassReset.Service.DBModels.UserDTO
+
 <div class="center-panel">
 	<h3>Forgotten password</h3>
 	<hr />
 	<div class="row">
-		<div class="col-md-6 info">
-			<p>Email sent!</p>
+		<div class="col-md-6 info success-panel">
+			<p style="text-align: center;"><i class="fa fa-check-circle"></i></p>
+			<p class="lead">Success!</p>
 		</div>
 		<div class="col-md-6">
-			<p>YAY</p>
+			<p>We sent an email with a reset token at <b>@Model.SecondaryEmail</b>. Please follow the instructions there to reset your password.</p>
 		</div>
 	</div>
 </div>

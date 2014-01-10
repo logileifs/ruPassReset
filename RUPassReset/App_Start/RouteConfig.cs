@@ -21,6 +21,12 @@ namespace RUPassReset
 			);
 
 			routes.MapRoute(
+				name: "Verify",
+				url: "verify/",
+				defaults: new { controller = "Home", action = "Verify" }
+			);
+
+			routes.MapRoute(
 				name: "Change",
 				url: "change/",
 				defaults: new { controller = "Home", action = "Change" }

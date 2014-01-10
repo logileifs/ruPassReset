@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using RUPassReset.Configuration;
 
 namespace RUPassReset.Service.Models.Password
 {
-	public class ChangePassword : Password
+	public class ChangePassword
 	{
-		[Required(ErrorMessage = "Please provide your old password.")]
-		[DataType(DataType.Password)]
-		public string Password { get; set; }
+		public string Token { get; set; }
+		public string Username { get; set; }
 
 		[Required(ErrorMessage = "Please provide a new password.")]
 		[StringLength(100, ErrorMessage = "The new password must be at least {2} characters long.", MinimumLength = 6)]

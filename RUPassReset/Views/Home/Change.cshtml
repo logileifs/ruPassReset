@@ -5,31 +5,15 @@
 	<hr />
 	<div class="row">
 		<div class="col-md-6 info">
-			<p>Please fill out the form to change your password.</p>
-			<p class="italic">Note that the password must be at least 6 characters long. We suggest you pick a password that consists of two or more random words to form a 
-				random sentence.
-			</p>
+			<p class="lead">Hi @Model.Username.</p> 
+			<p>Please enter your new password. </p>
+			<p><i>Note that the password must be at least 6 characters long.</i></p>
 		</div>
 		<div class="col-md-6">
-			@using (Html.BeginForm())
+			@using (Html.BeginForm("Change", "Home", FormMethod.Post))
 			{
-				<div class="form-group">
-					@Html.TextBoxFor(model => model.UserName, new
-					{
-						@class="form-control", 
-						@placeholder = "RU username",
-						@autofocus = true
-					})
-					@Html.ValidationMessageFor(model => model.UserName, null, new {@class="text-danger"})
-				</div>
-				<div class="form-group">
-					@Html.PasswordFor(model => model.Password, new 
-					{
-						@class="form-control",
-						@placeholder="Old password"
-					})
-					@Html.ValidationMessageFor(model => model.Password, null, new {@class="text-danger"})
-				</div>
+				@Html.HiddenFor(model => model.Token)
+				@Html.HiddenFor(model => model.Username)
 				<div class="form-group">
 					@Html.PasswordFor(model => model.PasswordNew, new 
 					{
@@ -46,9 +30,10 @@
 					})
 					@Html.ValidationMessageFor(model => model.PasswordNewConfirm, null, new {@class="text-danger"})
 				</div>
+				<hr/>
 				<div class="btn-controls pull-right">
 					<a href="/" class="btn btn-default">Cancel</a>
-					<button type="submit" class="btn btn-primary">Next</button>	
+					<button type="submit" class="btn btn-primary">Confirm</button>	
 				</div>
 			}
 		</div>

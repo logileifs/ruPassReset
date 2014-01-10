@@ -18,8 +18,10 @@ namespace RUPassReset.Service.Repositories
 		{
 			base.OnModelCreating(modelBuilder);
 			modelBuilder.Configurations.Add(new UserMap());
+			modelBuilder.Configurations.Add(new PersonMap());
 		}
 
 		public DbSet<User> Users { get; set; }
+		public DbSet<Person> Persons { get; set; }
 	}
 }
