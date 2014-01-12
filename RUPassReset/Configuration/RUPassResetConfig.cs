@@ -62,5 +62,11 @@ namespace RUPassReset.Configuration
 		{
 			get { return (int)this["maxAttempts"]; }
 		}
+
+		[ConfigurationProperty("maxAttemptsGagTime")]
+		public int MaxAttemptsGagTime
+		{
+			get { return (int)this["maxAttemptsGagTime"]; }
+		}
 	}
 }

@@ -42,11 +42,11 @@ namespace RUPassReset.Service
 			if (fullUser == null)
 				throw new UserNotFoundException();
 
-			var twentyFourHoursAgo = DateTime.Now.AddDays(-1);
+			var gagTime = DateTime.Now.AddHours(-RUPassResetConfig.Config.MaxAttemptsGagTime);
 
 			// check to see if user is making too many requests
 			var result = from passRecovery in _passCtx.PasswordRecovery
-				where (passRecovery.Username == fullUser.Username) && (passRecovery.TimeStamp > twentyFourHoursAgo)
+				where (passRecovery.Username == fullUser.Username) && (passRecovery.TimeStamp > gagTime)
 				select passRecovery;
 
 			if (result.Count() > RUPassResetConfig.Config.MaxAttempts)
@@ -117,7 +117,7 @@ namespace RUPassReset.Service
 			// set the new password
 			try
 			{
-				//_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
+				_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
 			}
 			catch (Exception ex)
 			{
