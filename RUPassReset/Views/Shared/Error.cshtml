@@ -1,10 +1,21 @@
-﻿@model System.Web.Mvc.HandleErrorInfo
-
-@{
+﻿@{
     ViewBag.Title = "Error";
 }
 
-<hgroup class="title">
-    <h1 class="error">Error.</h1>
-    <h2 class="error">An error occurred while processing your request.</h2>
-</hgroup>
+<div class="center-panel">
+	<h3>Change password</h3>
+	<hr />
+	<div class="row">
+		<div class="col-md-6 info error-panel">
+			<p style="text-align: center;"><i class="fa fa-exclamation-triangle"></i></p>
+			<p class="lead">Error!</p>
+		</div>
+		<div class="col-md-6">
+			<p>We apologize but something went horribly wrong. Please try again.</p>
+			<hr />
+			<div class="btn-controls pull-right">
+				<a href="/" class="btn btn-primary">Continue</a>
+			</div>
+		</div>
+	</div>
+</div>

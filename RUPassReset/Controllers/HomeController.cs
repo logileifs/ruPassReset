@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using RUPassReset.Configuration;
 using RUPassReset.Service;
+using RUPassReset.Service.Exceptions;
 using RUPassReset.Service.Models.Password;
 
 namespace RUPassReset.Controllers
@@ -42,14 +43,20 @@ namespace RUPassReset.Controllers
 
 			try
 			{
-				var user = _passwordService.CreateResetToken(sanitizedSSN, "89.160.136.204");
+				var user = _passwordService.CreateResetToken(sanitizedSSN, GetIp());
 				return View("ResetEmailSent", user);
 			}
 			catch (UserNotFoundException unfex)
 			{
-				ModelState.AddModelError("Error", "User not found.");
+				ModelState.AddModelError("Error", "Requested user was not found.");
 				return View();
 			}
+			catch (TooManyTriesException tmtex)
+			{
+				ModelState.AddModelError("Error", "Too many attempts. Please try again later.");
+				return View();
+			}
+			
 		}
 
 		[HttpGet]
@@ -75,14 +82,12 @@ namespace RUPassReset.Controllers
 			// First, check if token is active
 			var passRecovery = _passwordService.VerifyToken(changePassword.Token);
 			if (passRecovery == null)
-			{
 				return View("UnableToVerify");
-			}
+
 			// Check if modelstate is valid
 			if (!ModelState.IsValid)
-			{
 				return View("Change", changePassword);
-			}
+
 			// Check if password is long enough
 			if (changePassword.PasswordNew.Length < RUPassResetConfig.Config.MinimumPasswordLength)
 			{
@@ -93,11 +98,15 @@ namespace RUPassReset.Controllers
 			// All checks passed, proceed to change password
 			try
 			{
-				_passwordService.ResetPassword(passRecovery, changePassword.PasswordNew, "89.160.136.204");
+				_passwordService.ResetPassword(passRecovery, changePassword.PasswordNew, GetIp());
 			}
 			catch (IllegalTokenException itex)
 			{
 				return View("UnableToVerify");
+			}
+			catch (PasswordResetFailedException prfex)
+			{
+				return View("Error");
 			}
 			
 			return View("PasswordChangeSuccess");
@@ -108,7 +117,7 @@ namespace RUPassReset.Controllers
 
 		/// <summary>
 		/// Returns the IP address of the request. 
-		/// Currently not working.
+		/// Does not work for localhost. 
 		/// </summary>
 		/// <returns></returns>
 		private string GetIp()

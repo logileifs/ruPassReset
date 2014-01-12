@@ -196,6 +196,8 @@
     <Compile Include="Service\EmailService.cs" />
     <Compile Include="Service\DBModels\PasswordRecoveryMap.cs" />
     <Compile Include="Service\Exceptions\IllegalTokenException.cs" />
+    <Compile Include="Service\Exceptions\PasswordResetFailedException.cs" />
+    <Compile Include="Service\Exceptions\TooManyTriesException.cs" />
     <Compile Include="Service\LDAPPasswordService.cs" />
     <Compile Include="Service\Repositories\MyschoolDataContext.cs" />
     <Compile Include="Service\ServiceModels\ChangePassword.cs" />

@@ -56,5 +56,11 @@ namespace RUPassReset.Configuration
 		{
 			get { return (int) this["minimumPasswordLength"]; }
 		}
+
+		[ConfigurationProperty("maxAttempts")]
+		public int MaxAttempts
+		{
+			get { return (int)this["maxAttempts"]; }
+		}
 	}
 }

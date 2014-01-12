@@ -1,5 +1,9 @@
 ﻿@model RUPassReset.Service.Models.Password.ChangePassword
 
+@{
+    ViewBag.Title = "Change password";
+}
+
 <div class="center-panel">
 	<h3>Change password</h3>
 	<hr />
@@ -7,7 +11,7 @@
 		<div class="col-md-6 info">
 			<p class="lead">Hi @Model.Username.</p> 
 			<p>Please enter your new password. </p>
-			<p><i>Note that the password must be at least 6 characters long.</i></p>
+			<p><i>Note that the password must be at least 8 characters long.</i></p>
 		</div>
 		<div class="col-md-6">
 			@using (Html.BeginForm("Verify", "Home", FormMethod.Post))

@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using RUPassReset.Configuration;
 using RUPassReset.Service.DBModels;
+using RUPassReset.Service.Exceptions;
 using RUPassReset.Service.Repositories;
 
 namespace RUPassReset.Service
@@ -36,23 +37,35 @@ namespace RUPassReset.Service
 		/// </summary>
 		public UserDTO CreateResetToken(string ssn, string createdByIP)
 		{
+			// first, get the user
 			var fullUser = GetFullUserBySSN(ssn);
 			if (fullUser == null)
 				throw new UserNotFoundException();
 
+			var twentyFourHoursAgo = DateTime.Now.AddDays(-1);
+
+			// check to see if user is making too many requests
+			var result = from passRecovery in _passCtx.PasswordRecovery
+				where (passRecovery.Username == fullUser.Username) && (passRecovery.TimeStamp > twentyFourHoursAgo)
+				select passRecovery;
+
+			if (result.Count() > RUPassResetConfig.Config.MaxAttempts)
+				throw new TooManyTriesException();
+
 			// proceed by create a record in the database
-			var passRecovery = new PasswordRecovery
+			var newRecovery = new PasswordRecovery
 			{
 				Token = this.CreateToken(),
 				Username = fullUser.Username,
 				TimeStamp = DateTime.Now,
 				CreatedByIP = createdByIP
 			};
-			_passCtx.PasswordRecovery.Add(passRecovery);
+
+			_passCtx.PasswordRecovery.Add(newRecovery);
 			_passCtx.SaveChanges();
 
 			// finally, send the email
-			_emailService.sendPasswordResetEmail(fullUser, passRecovery.Token);
+			_emailService.SendPasswordResetEmail(fullUser, newRecovery.Token);
 
 			return fullUser;
 		}
@@ -66,20 +79,30 @@ namespace RUPassReset.Service
 			if (token == null)
 				return null;
 
-			var result = (from recovery in _passCtx.PasswordRecovery
+			var checkRecovery = (from recovery in _passCtx.PasswordRecovery
 				where recovery.Token == token
 				select recovery).SingleOrDefault();
+
 			// check if token exists
-			if (result == null)
+			if (checkRecovery == null)
 				return null;
 			// check if token has expired
-			if ((DateTime.Now - result.TimeStamp).TotalHours > RUPassResetConfig.Config.TokenLifeTime)
+			if ((DateTime.Now - checkRecovery.TimeStamp).TotalHours > RUPassResetConfig.Config.TokenLifeTime)
 				return null;
 			// check if token has been used
-			if (result.UsedByIP != null)
+			if (checkRecovery.UsedByIP != null)
 				return null;
+
+			// check if a newer token exists
+			var result = from recovery in _passCtx.PasswordRecovery
+				where recovery.Username == checkRecovery.Username && recovery.TimeStamp > checkRecovery.TimeStamp
+				select recovery;
+
+			if (result.Any())
+				return null;
+
 			// all checks passed, token is active
-			return result;
+			return checkRecovery;
 		}
 
 		/// <summary>
@@ -92,11 +115,22 @@ namespace RUPassReset.Service
 				throw new IllegalTokenException();
 
 			// set the new password
-			//_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
+			try
+			{
+				//_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
+			}
+			catch (Exception ex)
+			{
+				throw new PasswordResetFailedException();
+			}
+
+			// update the row and save changes
+			passRecovery.UsedByIP = usedByIP;
+			_passCtx.SaveChanges();
 
 			var fullUser = GetFullUserByUsername(passRecovery.Username);
-			// send confirmation email
-			_emailService.sendPasswordChangedConfirmation(fullUser);
+			// and finally, send confirmation email
+			_emailService.SendPasswordChangedConfirmation(fullUser);
 		}
 		#endregion
 

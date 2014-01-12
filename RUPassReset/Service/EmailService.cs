@@ -7,7 +7,7 @@ namespace RUPassReset.Service
 {
 	public class EmailService
 	{
-		public void sendPasswordResetEmail(UserDTO user, string token)
+		public void SendPasswordResetEmail(UserDTO user, string token)
 		{
 			var message = new MailMessage();
 			message.To.Add(user.SecondaryEmail);
@@ -22,10 +22,10 @@ namespace RUPassReset.Service
 			body += ("<p><br>Reykjavík University IT Support</p>");
 			message.Body = body;
 
-			send(message);
+			Send(message);
 		}
 
-		public void sendPasswordChangedConfirmation(UserDTO user)
+		public void SendPasswordChangedConfirmation(UserDTO user)
 		{
 			var message = new MailMessage();
 			message.To.Add(user.SecondaryEmail);
@@ -34,18 +34,18 @@ namespace RUPassReset.Service
 
 			var body = String.Format("<p>Dear {0},</p>", user.Name);
 			body += String.Format("<p>The password for your RU account(<i>{0}</i>) has been successfully reset.</p>", user.Username);
-			body += String.Format("<p>If you did not make this change or if you believe an unauthorized person has changed your password, go and <a href='{0}'>reset</a> your password immediately. Then update your security settings for this email account.");
+			body += String.Format("<p>If you did not make this change or if you believe an unauthorized person has changed your password, go and <a href='{0}'>reset</a> your password immediately. Then update your security settings for this email account.", RUPassResetConfig.Config.ResetURL);
 			body += "<p>If you need additional help, go to <a href='http://help.ru.is'>help.ru.is</a></p>";
 			body += ("<p><br>Reykjavík University IT Support</p>");
 			message.Body = body;
 
-			send(message);
+			Send(message);
 		}
 
-		private void send(MailMessage message)
+		private void Send(MailMessage message)
 		{
 			var smtp = new SmtpClient(RUPassResetConfig.Config.SMTPEmailServer);
-			message.From = new System.Net.Mail.MailAddress(RUPassResetConfig.Config.FromEmailAddress);
+			message.From = new MailAddress(RUPassResetConfig.Config.FromEmailAddress);
 			smtp.Send(message);
 		}
 	}
