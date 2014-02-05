@@ -4,16 +4,17 @@ using System.Text;
 using System.DirectoryServices.AccountManagement;
 using System.Data;
 using System.Configuration;
+using RUPassReset.Configuration;
 
 public class ADMethodsAccountManagement
 {
 	#region Variables
 
-	private string sDomain = "hirdc2.hir.is";
-	private string sDefaultOU = "OU=People,DC=hir,DC=is";
-	private string sDefaultRootOU = "DC=hir,DC=is";
-	private string sServiceUser = @"PasswordReset-ldap";
-	private string sServicePassword = "iez4queev0Aruemeech6";
+	private string sDomain = RUPassResetConfig.Config.ADDomain;
+	private string sDefaultOU = RUPassResetConfig.Config.ADDefaultOU;
+	private string sDefaultRootOU = RUPassResetConfig.Config.ADDefaultRootOU;
+	private string sServiceUser = @RUPassResetConfig.Config.ADServiceUser;
+	private string sServicePassword = RUPassResetConfig.Config.ADServicePassword;
 
 	#endregion
 	#region Validate Methods

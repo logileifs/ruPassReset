@@ -68,5 +68,35 @@ namespace RUPassReset.Configuration
 		{
 			get { return (int)this["maxAttemptsGagTime"]; }
 		}
+
+		[ConfigurationProperty("ADDomain")]
+		public string ADDomain
+		{
+			get { return (string)this["ADDomain"]; }
+		}
+
+		[ConfigurationProperty("ADDefaultOU")]
+		public string ADDefaultOU
+		{
+			get { return (string)this["ADDefaultOU"]; }
+		}
+
+		[ConfigurationProperty("ADDefaultRootOU")]
+		public string ADDefaultRootOU
+		{
+			get { return (string)this["ADDefaultRootOU"]; }
+		}
+
+		[ConfigurationProperty("ADServiceUser")]
+		public string ADServiceUser
+		{
+			get { return (string)this["ADServiceUser"]; }
+		}
+
+		[ConfigurationProperty("ADServicePassword")]
+		public string ADServicePassword
+		{
+			get { return (string)this["ADServicePassword"]; }
+		}
 	}
 }
