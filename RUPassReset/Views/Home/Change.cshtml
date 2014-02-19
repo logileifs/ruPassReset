@@ -22,7 +22,8 @@
 					@Html.PasswordFor(model => model.PasswordNew, new 
 					{
 						@class="form-control",
-						@placeholder="New password"
+						@placeholder="New password",
+						@autofocus = true
 					})
 					@Html.ValidationMessage("Error", new {@class="text-danger"})
 					@Html.ValidationMessageFor(model => model.PasswordNew, null, new {@class="text-danger"})
