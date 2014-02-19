@@ -9,6 +9,3 @@ reset password for ru
 - Breyta success skilaboðum
 - Breyta kt input í email
   - checka á emaili og að það sé unique
-
-
-

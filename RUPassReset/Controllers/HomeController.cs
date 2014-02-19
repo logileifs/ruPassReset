@@ -31,7 +31,7 @@ namespace RUPassReset.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Reset(string email)
+		public ActionResult Reset(string SSN)
 		{
 			if (SSN.Length != 11)
 			{
@@ -122,12 +122,22 @@ namespace RUPassReset.Controllers
 		/// <returns></returns>
 		private string GetIp()
 		{
-			string ipList = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+			var ipList = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 			if (!string.IsNullOrEmpty(ipList))
 			{
 				return ipList.Split(',')[0];
 			}
 			return Request.ServerVariables["REMOTE_ADDR"];
+		}
+
+		/// <summary>
+		/// Returns true if email is valid, false otherwise
+		/// </summary>
+		/// <param name="emailAddress"></param>
+		/// <returns>True if email is valid, false otherwise</returns>
+		private bool EmailIsValid(string emailAddress)
+		{
+			return false;
 		}
 		#endregion
 	}
