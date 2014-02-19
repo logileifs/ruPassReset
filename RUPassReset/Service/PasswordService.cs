@@ -44,7 +44,7 @@ namespace RUPassReset.Service
 
 			var gagTime = DateTime.Now.AddHours(-RUPassResetConfig.Config.MaxAttemptsGagTime);
 
-			// check to see if user is making too many requests
+			// check to see if user is making too many requests within a given time
 			var result = from passRecovery in _passCtx.PasswordRecovery
 				where (passRecovery.Username == fullUser.Username) && (passRecovery.TimeStamp > gagTime)
 				select passRecovery;
@@ -106,7 +106,7 @@ namespace RUPassReset.Service
 		}
 
 		/// <summary>
-		/// Given a token it will reset the password of the user that is assigned to that token. 
+		/// Resets the user's password with the new password given.
 		/// </summary>
 		public void ResetPassword(PasswordRecovery passRecovery, string newPassword, string usedByIP)
 		{
@@ -117,7 +117,7 @@ namespace RUPassReset.Service
 			// set the new password
 			try
 			{
-				_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
+				//_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
 			}
 			catch (Exception ex)
 			{
@@ -129,6 +129,7 @@ namespace RUPassReset.Service
 			_passCtx.SaveChanges();
 
 			var fullUser = GetFullUserByUsername(passRecovery.Username);
+
 			// and finally, send confirmation email
 			_emailService.SendPasswordChangedConfirmation(fullUser);
 		}

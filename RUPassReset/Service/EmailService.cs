@@ -18,8 +18,8 @@ namespace RUPassReset.Service
 			body += "<p>You have requested to reset your password for your account at Reykjavík University. To complete the process, please follow the link below.</p>";
 			body += String.Format("<p><a href='{0}{1}'>Reset now</a></p>", RUPassResetConfig.Config.VerifyTokenURL, token);
 			body += String.Format("<p>This link will expire {0} hours after this email was sent.</p>", RUPassResetConfig.Config.TokenLifeTime);
-			body += ("<p>If you didn't make this request yourself, it could be that somebody else has entered your social security number by mistake and your password is still the same.</p>");
-			body += ("<p><br>Reykjavík University IT Support</p>");
+			body += "<p>If you didn't make this request yourself, it could be that somebody else has entered your social security number by mistake. Don't worry, your password is still the same.</p>";
+			body += "<p><br>Reykjavík University IT Support</p>";
 			message.Body = body;
 
 			Send(message);
@@ -36,7 +36,7 @@ namespace RUPassReset.Service
 			body += String.Format("<p>The password for your RU account(<i>{0}</i>) has been successfully reset.</p>", user.Username);
 			body += String.Format("<p>If you did not make this change or if you believe an unauthorized person has changed your password, go and <a href='{0}'>reset</a> your password immediately. Then update your security settings for this email account.", RUPassResetConfig.Config.ResetURL);
 			body += "<p>If you need additional help, go to <a href='http://help.ru.is'>help.ru.is</a></p>";
-			body += ("<p><br>Reykjavík University IT Support</p>");
+			body += "<p><br>Reykjavík University IT Support</p>";
 			message.Body = body;
 
 			Send(message);

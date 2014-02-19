@@ -31,7 +31,7 @@ namespace RUPassReset.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Reset(string SSN)
+		public ActionResult Reset(string email)
 		{
 			if (SSN.Length != 11)
 			{

@@ -212,6 +212,8 @@
     <Content Include="Content\css\site.css" />
     <Content Include="Content\img\default_white.png" />
     <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\jquery.inputmask.js" />
+    <Content Include="Content\js\jquery.inputmask.regex.extensions.js" />
     <Content Include="Content\js\jquery.maskedinput.min.js" />
     <Content Include="Content\js\site.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
