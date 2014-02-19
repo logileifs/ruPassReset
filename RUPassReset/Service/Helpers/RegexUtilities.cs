@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace RUPassReset.Service.Helpers
 {
+	/// <summary>
+	/// Taken from here: http://msdn.microsoft.com/en-us/library/01escwtf(v=vs.110).aspx
+	/// </summary>
 	public class RegexUtilities
 	{
 		bool invalid = false;
