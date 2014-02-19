@@ -21,7 +21,9 @@ namespace RUPassReset.Service.Repositories
 			modelBuilder.Configurations.Add(new PersonMap());
 		}
 
+		// Users table
 		public DbSet<User> Users { get; set; }
+		// Folk table
 		public DbSet<Person> Persons { get; set; }
 	}
 }

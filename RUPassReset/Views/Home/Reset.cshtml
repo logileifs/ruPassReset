@@ -15,9 +15,9 @@
 			@using (Html.BeginForm("Reset", "Home", FormMethod.Post))
 			{
 				<div class="form-group">
-					@Html.TextBox("SSN", null, new
+					@Html.TextBox("email", null, new
 					{
-						@class="form-control ssn-field", 
+						@class="form-control email-field", 
 						@placeholder = "Email address",
 						@autofocus = true
 					})

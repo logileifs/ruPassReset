@@ -35,10 +35,10 @@ namespace RUPassReset.Service
 		/// <summary>
 		/// Creates a reset password token and sends that token to the user.
 		/// </summary>
-		public UserDTO CreateResetToken(string ssn, string createdByIP)
+		public UserDTO CreateResetToken(string email, string createdByIP)
 		{
 			// first, get the user
-			var fullUser = GetFullUserBySSN(ssn);
+			var fullUser = GetFullUserByEmail(email);
 			if (fullUser == null)
 				throw new UserNotFoundException();
 
@@ -152,15 +152,17 @@ namespace RUPassReset.Service
 			return builder.ToString();
 		}
 
-		private UserDTO GetFullUserBySSN(string ssn)
+		private UserDTO GetFullUserByEmail(string email)
 		{
 			// find the user
 			var user = (from mUser in _myschoolCtx.Users
-						where mUser.SSN == ssn
+						where mUser.Email == email
 						select mUser).SingleOrDefault();
 
 			if (user == null)
+			{
 				return null;
+			}
 
 			// user exists, find it's persona
 			var person = (from mPerson in _myschoolCtx.Persons

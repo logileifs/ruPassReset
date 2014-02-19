@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using RUPassReset.Configuration;
 using RUPassReset.Service;
 using RUPassReset.Service.Exceptions;
+using RUPassReset.Service.Helpers;
 using RUPassReset.Service.Models.Password;
 
 namespace RUPassReset.Controllers
@@ -11,12 +12,14 @@ namespace RUPassReset.Controllers
 	{
 		#region Private variables
 		private PasswordService _passwordService;
+		private RegexUtilities _regexUtilities;
 		#endregion
 
 		#region Public methods
 		public HomeController()
 		{
 			_passwordService = new PasswordService();
+			_regexUtilities = new RegexUtilities();
 		}
 
 		public ActionResult Index()
@@ -31,24 +34,22 @@ namespace RUPassReset.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Reset(string SSN)
+		public ActionResult Reset(string email)
 		{
-			if (SSN.Length != 11)
+			if (!_regexUtilities.IsValidEmail(email))
 			{
-				ModelState.AddModelError("Error", "Invalid social security number.");
+				ModelState.AddModelError("Error", "This email is invalid.");
 				return View();
 			}
 
-			var sanitizedSSN = SSN.Replace("-", "");
-
 			try
 			{
-				var user = _passwordService.CreateResetToken(sanitizedSSN, GetIp());
+				var user = _passwordService.CreateResetToken(email, GetIp());
 				return View("ResetEmailSent", user);
 			}
 			catch (UserNotFoundException unfex)
 			{
-				ModelState.AddModelError("Error", "Requested user was not found.");
+				ModelState.AddModelError("Error", "Could not find any user with that email.");
 				return View();
 			}
 			catch (TooManyTriesException tmtex)
@@ -128,16 +129,6 @@ namespace RUPassReset.Controllers
 				return ipList.Split(',')[0];
 			}
 			return Request.ServerVariables["REMOTE_ADDR"];
-		}
-
-		/// <summary>
-		/// Returns true if email is valid, false otherwise
-		/// </summary>
-		/// <param name="emailAddress"></param>
-		/// <returns>True if email is valid, false otherwise</returns>
-		private bool EmailIsValid(string emailAddress)
-		{
-			return false;
 		}
 		#endregion
 	}
