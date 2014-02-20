@@ -120,7 +120,7 @@ namespace RUPassReset.Service
 			// set the new password
 			try
 			{
-				//_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
+				_adHelperAccountManagement.SetUserPassword(passRecovery.Username, newPassword, out errMessage);
 			}
 			catch (Exception ex)
 			{
