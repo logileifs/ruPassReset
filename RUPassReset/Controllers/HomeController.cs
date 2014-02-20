@@ -57,6 +57,11 @@ namespace RUPassReset.Controllers
 				ModelState.AddModelError("Error", "Too many attempts. Please try again later.");
 				return View();
 			}
+			catch (EmailNotFoundException enuex)
+			{
+				ModelState.AddModelError("Error", "Email not found. Please contact IT to change your password.");
+				return View();
+			}
 			
 		}
 
@@ -102,6 +107,10 @@ namespace RUPassReset.Controllers
 				_passwordService.ResetPassword(passRecovery, changePassword.PasswordNew, GetIp());
 			}
 			catch (IllegalTokenException itex)
+			{
+				return View("UnableToVerify");
+			}
+			catch (UserNotFoundException unfex)
 			{
 				return View("UnableToVerify");
 			}

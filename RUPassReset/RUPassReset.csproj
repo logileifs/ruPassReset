@@ -195,6 +195,7 @@
     <Compile Include="Service\DBModels\UserMap.cs" />
     <Compile Include="Service\EmailService.cs" />
     <Compile Include="Service\DBModels\PasswordRecoveryMap.cs" />
+    <Compile Include="Service\Exceptions\EmailNotFoundException.cs" />
     <Compile Include="Service\Exceptions\IllegalTokenException.cs" />
     <Compile Include="Service\Exceptions\PasswordResetFailedException.cs" />
     <Compile Include="Service\Exceptions\TooManyTriesException.cs" />

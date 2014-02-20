@@ -35,12 +35,13 @@ namespace RUPassReset.Service
 		/// <summary>
 		/// Creates a reset password token and sends that token to the user.
 		/// </summary>
+		/// <exception cref="TooManyTriesException">If there are too many attempts at changing the password for this user</exception>
+		/// <param name="email">The email to create the token for</param>
+		/// <param name="createdByIP">The IP address that is requesting the reset.</param>
 		public UserDTO CreateResetToken(string email, string createdByIP)
 		{
 			// first, get the user
 			var fullUser = GetFullUserByEmail(email);
-			if (fullUser == null)
-				throw new UserNotFoundException();
 
 			var gagTime = DateTime.Now.AddHours(-RUPassResetConfig.Config.MaxAttemptsGagTime);
 
@@ -73,6 +74,7 @@ namespace RUPassReset.Service
 		/// <summary>
 		/// Verfies that the token has not expired and not been used.
 		/// </summary>
+		/// <param name="token">The token that was created for the reset request</param>
 		/// <returns>True if the token is still active, false otherwise.</returns>
 		public PasswordRecovery VerifyToken(string token)
 		{
@@ -107,6 +109,7 @@ namespace RUPassReset.Service
 
 		/// <summary>
 		/// Resets the user's password with the new password given.
+		/// <exception cref="PasswordResetFailedException">If something failed in changing the password.</exception>
 		/// </summary>
 		public void ResetPassword(PasswordRecovery passRecovery, string newPassword, string usedByIP)
 		{
@@ -152,22 +155,35 @@ namespace RUPassReset.Service
 			return builder.ToString();
 		}
 
+		/// <summary>
+		/// Given an email, it will look it up in the Folk table. If it exists and it's unique, it will try to 
+		/// find the user in myscool. 
+		/// </summary>
+		/// <param name="email">Email to search by</param>
+		/// <exception cref="UserNotFoundException">If the user isn't found in myschool</exception>
+		/// <exception cref="EmailNotFoundException">If the email wasn't unique or was not found in the Folk table</exception>
+		/// <returns>UserDTO</returns>
 		private UserDTO GetFullUserByEmail(string email)
 		{
-			// find the user
+			// find the email in Folk table
+			var checkResult = from mPerson in _myschoolCtx.Persons
+				where mPerson.Email == email
+				select mPerson;
+
+			// check if email was found OR if email is linked to multiple accounts
+			// If either, just throw emailnotfoundexception because we don't want to say too much 
+			if (checkResult.Count() != 1)
+				throw new EmailNotFoundException();
+
+			var person = checkResult.SingleOrDefault();
+			
+			// check if the user is in myschool
 			var user = (from mUser in _myschoolCtx.Users
-						where mUser.Email == email
+						where mUser.SSN == person.SSN
 						select mUser).SingleOrDefault();
 
 			if (user == null)
-			{
-				return null;
-			}
-
-			// user exists, find it's persona
-			var person = (from mPerson in _myschoolCtx.Persons
-						  where mPerson.SSN == user.SSN
-						  select mPerson).SingleOrDefault();
+				throw new UserNotFoundException();
 
 			var fullUser = new UserDTO
 			{
@@ -180,6 +196,12 @@ namespace RUPassReset.Service
 			return fullUser;
 		}
 
+		/// <summary>
+		/// Finds a user given an HR login username
+		/// </summary>
+		/// <param name="username">The username to search by</param>
+		/// <exception cref="UserNotFoundException">If the username is not found in Users table in myschool database</exception>
+		/// <returns>UserDTO</returns>
 		private UserDTO GetFullUserByUsername(string username)
 		{
 			// find the user
@@ -188,7 +210,7 @@ namespace RUPassReset.Service
 						select mUser).SingleOrDefault();
 
 			if (user == null)
-				return null;
+				throw new UserNotFoundException();
 
 			// user exists, find it's persona
 			var person = (from mPerson in _myschoolCtx.Persons
