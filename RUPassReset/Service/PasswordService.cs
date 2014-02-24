@@ -66,7 +66,7 @@ namespace RUPassReset.Service
 			_passCtx.SaveChanges();
 
 			// finally, send the email
-			_emailService.SendPasswordResetEmail(fullUser, newRecovery.Token);
+			//_emailService.SendPasswordResetEmail(fullUser, newRecovery.Token);
 
 			return fullUser;
 		}
@@ -171,8 +171,8 @@ namespace RUPassReset.Service
 				select mPerson;
 
 			// check if email was found OR if email is linked to multiple accounts
-			// If either, just throw emailnotfoundexception because we don't want to say too much 
-			if (checkResult.Count() != 1)
+			// If either, just throw EmailNotFoundException because we don't want to say too much 
+			if (!checkResult.Any() || checkResult.Count() != 1)
 				throw new EmailNotFoundException();
 
 			var person = checkResult.SingleOrDefault();
