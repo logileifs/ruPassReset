@@ -66,7 +66,7 @@ namespace RUPassReset.Service
 			_passCtx.SaveChanges();
 
 			// finally, send the email
-			//_emailService.SendPasswordResetEmail(fullUser, newRecovery.Token);
+			_emailService.SendPasswordResetEmail(fullUser, newRecovery.Token);
 
 			return fullUser;
 		}
